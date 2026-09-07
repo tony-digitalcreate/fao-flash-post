@@ -14,6 +14,7 @@ export const TEMPLATES: Template[] = [
 ];
 
 const imageCache = new Map<string, Promise<HTMLImageElement>>();
+type OfflineAssetMap = typeof globalThis & { __FAO_OFFLINE_ASSETS__?: Record<string,string> };
 export function loadImage(src: string) {
   let pending = imageCache.get(src);
   if (!pending) {
@@ -21,7 +22,8 @@ export function loadImage(src: string) {
       const img = new Image();
       img.onload = () => resolve(img);
       img.onerror = () => { imageCache.delete(src); reject(new Error('Unable to load image')); };
-      img.src = src.startsWith('/assets/') ? import.meta.env.BASE_URL + src.slice(1) : src;
+      const embedded=(globalThis as OfflineAssetMap).__FAO_OFFLINE_ASSETS__?.[src];
+      img.src = embedded ?? (src.startsWith('/assets/') ? import.meta.env.BASE_URL + src.slice(1) : src);
     });
     imageCache.set(src,pending);
   }

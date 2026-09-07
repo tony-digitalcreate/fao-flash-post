@@ -29,4 +29,8 @@ The GitHub Pages workflow publishes dist/ from pushes to main. Enable Pages with
 
 The public repository starts with sanitized source only. Real event photos and the private site's Git history are not included.
 
+## Offline package
+
+`npm run build:offline` creates a self-contained HTML edition under `outputs/FAO-Flash-Post-Offline` in the workspace. It embeds the JavaScript, styles, fonts, and logo assets and can be opened directly without a server or internet connection.
+
 This is a communications tool, not an official FAO publishing service. FAO and UN logos remain the property of their respective organizations; use must follow their applicable brand permissions.
