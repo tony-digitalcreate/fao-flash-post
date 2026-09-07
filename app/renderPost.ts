@@ -35,7 +35,7 @@ function placeholder(ctx:CanvasRenderingContext2D,x:number,y:number,w:number,h:n
 function photoCard(ctx:CanvasRenderingContext2D,img:HTMLImageElement|null,photo:Photo,x:number,y:number,w:number,h:number,rotation:number,index:number,insets=[34,45,34,37]){ctx.save();ctx.translate(x+w/2,y+h/2);ctx.rotate(rotation*Math.PI/180);ctx.shadowColor='rgba(25,48,64,.24)';ctx.shadowBlur=25;ctx.shadowOffsetY=14;ctx.fillStyle='#fff';ctx.fillRect(-w/2,-h/2,w,h);ctx.shadowColor='transparent';const px=-w/2+insets[0],py=-h/2+insets[1],pw=w-insets[0]-insets[2],ph=h-insets[1]-insets[3];if(img&&photo)cover(ctx,img,photo,px,py,pw,ph);else placeholder(ctx,px,py,pw,ph,index);ctx.restore();}
 function tape(ctx:CanvasRenderingContext2D,x:number,y:number,w=205,h=65){ctx.save();ctx.globalAlpha=.7;ctx.fillStyle='#dfd0b4';ctx.fillRect(x,y,w,h);ctx.restore();}
 function fitText(ctx:CanvasRenderingContext2D,text:string,max:number,start=67){let size=start;while(size>34){ctx.font=`600 ${size}px Montserrat`;if(ctx.measureText(text).width<=max)break;size-=2;}return size;}
-function brand(ctx:CanvasRenderingContext2D,left:HTMLImageElement,right:HTMLImageElement){ctx.drawImage(left,50,955,335,93);ctx.drawImage(right,847,960,190,86);}
+function brand(ctx:CanvasRenderingContext2D,left:HTMLImageElement,right:HTMLImageElement,blue=false){if(blue){ctx.drawImage(left,0,0,327,90,50,955,335,93);ctx.drawImage(left,619,0,182,90,847,960,190,86);return;}ctx.drawImage(left,50,955,335,93);ctx.drawImage(right,847,960,190,86);}
 
 
 export type PostState = { templateId: TemplateId; headline: string; background: string; wave: string; headlineColor: string; logoColor: string; photos: Photo[] };
@@ -44,14 +44,14 @@ export async function renderPost(canvas: HTMLCanvasElement, state: PostState) {
   if (!ctx) throw new Error('Canvas is unavailable');
   const { templateId, headline, background, wave, headlineColor, logoColor, photos } = state;
     const blueLogos=logoColor.toLowerCase()!=='#ffffff';
-    const [leftLogo,rightLogo,...loaded]=await Promise.all([loadImage(blueLogos?'/assets/fao-un-blue-logo.svg':'/assets/fao-un-white-trim.png'),loadImage(blueLogos?'/assets/fao-right-blue-trim.png':'/assets/fao-right-white-trim.png'),...photos.map(p=>p?loadImage(p.src):Promise.resolve(null))]);
+    const [leftLogo,rightLogo,...loaded]=await Promise.all([loadImage(blueLogos?'/assets/fao-blue-two-side.svg':'/assets/fao-un-white-trim.png'),loadImage(blueLogos?'/assets/fao-blue-two-side.svg':'/assets/fao-right-white-trim.png'),...photos.map(p=>p?loadImage(p.src):Promise.resolve(null))]);
     await document.fonts.load('600 68px Montserrat');await document.fonts.ready;ctx.clearRect(0,0,1080,1080);ctx.fillStyle=background;ctx.fillRect(0,0,1080,1080);
     if(templateId==='single'){
       if(loaded[0]&&photos[0])cover(ctx,loaded[0],photos[0],0,0,1080,920);else placeholder(ctx,0,0,1080,920,0);
       ctx.fillStyle='#fff';ctx.fillRect(0,920,1080,160);
       ctx.fillStyle=headlineColor;ctx.fillRect(0,21,751,109);
       const size=fitText(ctx,headline,650,67);ctx.font=`600 ${size}px Montserrat`;ctx.fillStyle='#fff';ctx.fillText(headline,52,95);
-      brand(ctx,leftLogo,rightLogo);return;
+      brand(ctx,leftLogo,rightLogo,blueLogos);return;
     }
     if(templateId==='right'){
       ctx.fillStyle=wave;ctx.beginPath();ctx.moveTo(0,202);ctx.bezierCurveTo(230,410,630,238,1080,424);ctx.lineTo(1080,675);ctx.bezierCurveTo(780,900,360,592,0,694);ctx.closePath();ctx.fill();
@@ -74,5 +74,5 @@ export async function renderPost(canvas: HTMLCanvasElement, state: PostState) {
       tape(ctx,466,429,152,46);
       ctx.fillStyle=headlineColor;ctx.fillRect(0,32,696,108);const size=fitText(ctx,headline,632,68);ctx.font=`600 ${size}px Montserrat`;ctx.fillStyle='#fff';ctx.fillText(headline,33,108);
     }
-    brand(ctx,leftLogo,rightLogo);
+    brand(ctx,leftLogo,rightLogo,blueLogos);
 }

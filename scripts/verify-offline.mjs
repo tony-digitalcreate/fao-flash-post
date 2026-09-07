@@ -18,6 +18,7 @@ const context={globalThis:{}};
 vm.runInNewContext(bootstrap,context);
 const assets=context.globalThis.__FAO_OFFLINE_ASSETS__;
 assert.deepEqual(Object.keys(assets).sort(),[
+  '/assets/fao-blue-two-side.svg',
   '/assets/fao-right-blue-trim.png','/assets/fao-right-white-trim.png',
   '/assets/fao-un-blue-logo.svg',
   '/assets/fao-un-blue-trim.png','/assets/fao-un-white-trim.png',

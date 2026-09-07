@@ -24,8 +24,8 @@ for(const t of TEMPLATES){
     await renderPost(canvas,{templateId:t.id,headline:t.headline,background:t.colors.background,wave:t.colors.wave,headlineColor:t.colors.headline,logoColor:t.colors.logo,photos});
     const draws=calls.filter(c=>c[0]==='drawImage');
     assert.equal(draws.length,2+(withPhotos?t.photos:0),t.id+' photo and logo count');
-    assert.deepEqual(draws.at(-2).slice(2),[50,955,335,93],t.id+' left logo bounds');
-    assert.deepEqual(draws.at(-1).slice(2),[847,960,190,86],t.id+' right logo bounds');
+    assert.deepEqual(draws.at(-2).slice(-4),[50,955,335,93],t.id+' left logo bounds');
+    assert.deepEqual(draws.at(-1).slice(-4),[847,960,190,86],t.id+' right logo bounds');
     for(const draw of draws){assert.ok(draw.slice(2).every(Number.isFinite),'finite image bounds');}
     console.log('PASS',t.id,withPhotos?'photo crops + logos':'empty frames + logos');
   }

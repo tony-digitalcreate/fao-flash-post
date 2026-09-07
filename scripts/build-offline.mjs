@@ -25,6 +25,7 @@ const embedded=[
   'assets/Montserrat-Bold.ttf',
   'assets/fao-un-blue-trim.png',
   'assets/fao-un-blue-logo.svg',
+  'assets/fao-blue-two-side.svg',
   'assets/fao-un-white-trim.png',
   'assets/fao-right-blue-trim.png',
   'assets/fao-right-white-trim.png',
